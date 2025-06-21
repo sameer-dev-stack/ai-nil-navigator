@@ -62,14 +62,27 @@ export default function Dashboard() {
       // Load user profile
       const userDoc = await getDoc(doc(db, 'users', currentUser!.uid));
       if (userDoc.exists()) {
-        const profile = userDoc.data() as UserProfile;
+        const profileData = userDoc.data();
+        const profile: UserProfile = {
+          firstName: profileData.firstName || '',
+          lastName: profileData.lastName || '',
+          sport: profileData.sport || '',
+          schoolYear: profileData.schoolYear || '',
+          state: profileData.state || '',
+          goals: profileData.goals || '',
+          hasCompletedProfile: profileData.hasCompletedProfile || false,
+        };
         setUserProfile(profile);
 
-        // If profile is incomplete, redirect to setup
-        if (!profile.hasCompletedProfile) {
+        // If profile is incomplete OR critical info like firstName is missing, redirect.
+        if (!profile.hasCompletedProfile || !profile.firstName) {
           navigate('/profile-setup');
           return;
         }
+      } else {
+        // If no user document exists at all, redirect to profile setup.
+        navigate('/profile-setup');
+        return;
       }
 
       // Load NIL plans
@@ -238,7 +251,14 @@ export default function Dashboard() {
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-2xl font-heading font-bold text-black dark:text-white">Your NIL Plans</h3>
               <Button
-                onClick={() => setShowGenerator(true)}
+                onClick={() => {
+                  if (userProfile?.firstName) {
+                    setShowGenerator(true);
+                  } else {
+                    console.error("User profile is incomplete. Cannot generate plan.");
+                    navigate('/profile-setup');
+                  }
+                }}
                 className="bg-elite-lime text-black hover:bg-elite-lime/90 font-heading font-semibold"
               >
                 <Plus className="w-4 h-4 mr-2" />
@@ -257,7 +277,14 @@ export default function Dashboard() {
                     Generate your first personalized NIL strategy to start dominating your game.
                   </CardDescription>
                   <Button
-                    onClick={() => setShowGenerator(true)}
+                    onClick={() => {
+                      if (userProfile?.firstName) {
+                        setShowGenerator(true);
+                      } else {
+                        console.error("User profile is incomplete. Cannot create first plan.");
+                        navigate('/profile-setup');
+                      }
+                    }}
                     className="bg-black text-white hover:bg-elite-gray-800"
                   >
                     <Zap className="w-4 h-4 mr-2" />
