@@ -27,6 +27,25 @@ export default function NILPlanGenerator({ userProfile, onPlanGenerated, onCance
   const [error, setError] = useState('');
   const [progress, setProgress] = useState(0);
 
+  // Add this check at the beginning
+  if (!userProfile || !userProfile.firstName) {
+    // This case should ideally be prevented by the parent component (Dashboard.tsx)
+    // redirecting to profile setup. This is an additional safeguard.
+    return (
+      <div className="min-h-screen bg-white dark:bg-gray-900 flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-red-500 dark:text-red-400">
+            Error: User profile is incomplete. Please complete your profile.
+          </p>
+          <Button onClick={onCancel} className="mt-4">Back to Dashboard</Button>
+        </div>
+      </div>
+    );
+  }
+
+  const handleGenerate = async () => {
+  const [progress, setProgress] = useState(0);
+
   const handleGenerate = async () => {
     setIsGenerating(true);
     setError('');
