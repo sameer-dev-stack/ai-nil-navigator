@@ -5,7 +5,7 @@
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.6-blue.svg)
 ![Firebase](https://img.shields.io/badge/Firebase-11.9.1-orange.svg)
 
-**Live Demo**: [https://q8b598baq9.space.minimax.io](https://q8b598baq9.space.minimax.io)
+**Live Demo**: [https://q8b598baq9.space.minimax.io](https://ai-nil-navigator.netlify.app/)
 
 A professional AI-powered web application that serves as a personal advisor for high school athletes, generating comprehensive NIL (Name, Image, Likeness) action plans with cutting-edge design and technology.
 
